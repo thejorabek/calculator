@@ -1,6 +1,5 @@
 import 'package:calculator/calculator_cubit/calculator_cubit.dart';
 import 'package:calculator/calculator_cubit/calculator_view.dart';
-import 'package:calculator/calculator_cubit/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => CalculatorCubit(),
       child: MaterialApp(
-        home: View(),
+        home: CalculatorView(),
         debugShowCheckedModeBanner: false,
       ),
     );
