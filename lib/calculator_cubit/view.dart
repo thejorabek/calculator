@@ -1,5 +1,6 @@
 import 'package:calculator/widgets/widget.dart';
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class View extends StatefulWidget {
   const View({super.key});
@@ -77,17 +78,45 @@ class _ViewState extends State<View> {
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10),
                     itemBuilder: (context, index) {
-                      if (index == 0 || index == 1) {
+                      if (index == 0) {
                         return MyButton(
+                          buttonTapped: () {
+                            setState(() {
+                              userQuestion = '';
+                            });
+                          },
                           color: Color(0xFF2E2F38),
+                          textColor: Colors.white,
+                          buttonText: buttons[index],
+                        );
+                      } else if (index == 1) {
+                        return MyButton(
+                          buttonTapped: () {
+                            setState(() {
+                              userQuestion = userQuestion.substring(
+                                  0, userQuestion.length - 1);
+                            });
+                          },
+                          color: Color(0xFF2E2F38),
+                          textColor: Colors.white,
+                          buttonText: buttons[index],
+                        );
+                      } else if (index == buttons.length - 1) {
+                        return MyButton(
+                          buttonTapped: () {
+                            setState(() {
+                              equalPressed();
+                            });
+                          },
+                          color: Color(0xFF4B5EFC),
                           textColor: Colors.white,
                           buttonText: buttons[index],
                         );
                       } else {
                         return MyButton(
-                          buttonTapped: (){
+                          buttonTapped: () {
                             setState(() {
-                              userQuestion+=buttons[index];
+                              userQuestion += buttons[index];
                             });
                           },
                           color: isOperator(buttons[index])
@@ -109,5 +138,15 @@ class _ViewState extends State<View> {
       return true;
     }
     return false;
+  }
+
+  void equalPressed() {
+    String finalQuestion = userQuestion;
+    finalQuestion = finalQuestion.replaceAll('x', '*');
+    Parser p = Parser();
+    Expression exp = p.parse(finalQuestion);
+    ContextModel cm = ContextModel();
+    double eval = exp.evaluate(EvaluationType.REAL, cm);
+    userAnswer = eval.toString();
   }
 }
